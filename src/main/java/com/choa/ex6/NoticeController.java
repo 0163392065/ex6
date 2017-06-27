@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,14 @@ public class NoticeController {
 	public String list(Model model, ListInfo listInfo) throws Exception{
 		List<BoardDTO> ar = noticeService.boardList(listInfo);
 		
+		/* 에러를 ExceptionController로 따로 넘기지 않고 일어나는 자리에서 에외처리, 이렇게하면
+		 * 예외 메세지에 대해서 뜨고 원래 되던 기능이 가능함
+		 * try{
+		System.out.println(ar.get(1000).getTitle());
+		throw new IndexOutOfBoundsException();
+		} catch (Exception e){
+			e.printStackTrace();
+		}*/
 		model.addAttribute("list", ar);
 		model.addAttribute("listInfo", listInfo);
 		model.addAttribute("board", "notice");
@@ -101,8 +110,6 @@ public class NoticeController {
 		
 		return "redirect:/notice/noticeList?curPage=1";
 				
-		
-		
 	}
 	
 }

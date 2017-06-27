@@ -30,10 +30,22 @@
 	
 	<beans:bean class="com.choa.file.Download" id="download"></beans:bean>
 	
+	<beans:bean class="com.choa.aspect.TestInterceptor" id="testInterceptor"></beans:bean>
+	
+	<!-- 인터셉터를 잘 쓰면 코드 양을 줄일 수 있다. -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/notice/*"/>
+			<mapping path="/freeBoard/*"/>
+			<beans:ref bean="testInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	<context:component-scan base-package="com.choa.ex6" />
 	<context:component-scan base-package="com.choa.notice" />
 	<context:component-scan base-package="com.choa.memo" />
 	
+	<context:component-scan base-package="com.choa.table" />
 	<context:component-scan base-package="com.choa.aspect" />
 	
 	<!-- 2번 anntation방식 일때 scan을 spring용어가 아니므로 이것을 추가해야함 -->
