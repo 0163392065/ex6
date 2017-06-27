@@ -1,21 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 	
+	
+	
+	<!-- 06.27 공통 로직 -->
+	<!-- <bean class="com.choa.aspect.CardCheck" id="cardCheck"></bean> -->
+
+<!-- 	<bean class="com.choa.aspect.Transport" id="transport"></bean>
+	<bean class="com.choa.aspect.Trip" id="trip"></bean> -->
+	
+<!-- 	<aop:config>
+      <aop:aspect id="cardAspect" ref="cardCheck">   Aspect : 여러 객체에 공통으로 적용 되는 관심 사항들
+         <aop:pointcut expression="execution(* com.choa.aspect..Transport.*(..))" id="trans"/>   poingCut : JoinPoint 부분집합 //
+         expression="* com.choa.aspect..Transport.*(..)"
+         
+            ..  : 하위의 모든 디렉터리
+            *() : 하위의 모든 메서드
+            (..) : 모든 매개변수
+            aspect패키지 안에 모든 것 + Transport클래스안에 모든 메서드 매개변수의 유무 상관없이 라는 뜻
+         
+          <aop:around method="check" pointcut-ref="trans" />
+      </aop:aspect>
+      <aop:aspect id="cardReserve" ref="cardCheck">
+      	<aop:pointcut expression="execution(* com.choa.aspect.Trip.*(..))" id="reserve"/>
+      	<aop:before method="reservation" pointcut-ref="reserve"/>
+      </aop:aspect>
+   </aop:config>   -->
+   
+   
+   
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		<!-- datasource -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="propertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:mybatis/myBatis.properties</value>
+		</property>
+	</bean>
+	
+	<!-- datasource -->
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
-		<property name="username" value="user03" />
-		<property name="password" value="user03" />
-		<property name="url" value="jdbc:oracle:thin:@192.168.20.20:1521:xe" />
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.pw}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="driverClassName" value="${jdbc.driver}" />
 	</bean>
 	
 	<!-- connnection, mapper -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"/>
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
 	</bean>	
 	
 	<!-- dao 사용할거 -->	
@@ -27,3 +64,4 @@
 		<property name="defaultEncoding" value="UTF-8"></property>
 	</bean>
 </beans>
+
